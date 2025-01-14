@@ -1,0 +1,14 @@
+.user-management {
+  padding: 24px;
+}
+
+.user-management .header {
+  margin-bottom: 24px;
+}
+
+.user-management .header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin: 0;
+}

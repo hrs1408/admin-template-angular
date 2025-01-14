@@ -1,0 +1,365 @@
+.blog-form {
+  padding: 24px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+
+  @media (max-width: 1024px) {
+    padding: 16px;
+  }
+
+  .header {
+    margin-bottom: 24px;
+    text-align: center;
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(45deg, var(--primary-dark), var(--primary-main));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0;
+      letter-spacing: -0.5px;
+
+      @media (max-width: 768px) {
+        font-size: 24px;
+      }
+    }
+  }
+
+  form {
+    background: var(--background-paper);
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+
+    @media (max-width: 768px) {
+      padding: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+
+      label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--primary-dark);
+        font-size: 15px;
+        letter-spacing: -0.3px;
+
+        .required {
+          color: #ff4d4f;
+          margin-left: 4px;
+        }
+      }
+
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #e6e6e6;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        font-size: 15px;
+        background: #fff;
+        color: #333;
+        letter-spacing: -0.3px;
+
+        &::placeholder {
+          color: #999;
+        }
+
+        &:hover {
+          border-color: var(--primary-main);
+          background: #fafafa;
+        }
+
+        &:focus {
+          border-color: var(--primary-main);
+          box-shadow: 0 0 0 3px rgba(144, 102, 204, 0.15);
+          outline: none;
+          background: #fff;
+        }
+
+        &.is-invalid {
+          border-color: #ff4d4f;
+          background: #fff1f0;
+        }
+      }
+
+      textarea {
+        min-height: 120px;
+        resize: vertical;
+        line-height: 1.6;
+      }
+
+      .image-upload {
+        border: 1px dashed #e6e6e6;
+        border-radius: 8px;
+        padding: 32px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: #fafafa;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+
+        @media (max-width: 768px) {
+          padding: 24px;
+          min-height: 160px;
+        }
+
+        &:hover {
+          border-color: var(--primary-main);
+          background: #f6f3ff;
+
+          .upload-btn {
+            background: var(--primary-main);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(144, 102, 204, 0.2);
+          }
+        }
+
+        .upload-btn {
+          background: #f6f3ff;
+          color: var(--primary-main);
+          border: none;
+          padding: 10px 20px;
+          border-radius: 8px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-top: 16px;
+          font-size: 14px;
+
+          i {
+            font-size: 16px;
+          }
+
+          &:hover {
+            background: var(--primary-main);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(144, 102, 204, 0.2);
+          }
+
+          &:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(144, 102, 204, 0.2);
+          }
+        }
+
+        input[type="file"] {
+          display: none;
+        }
+      }
+
+      .image-preview {
+        margin-top: 16px;
+        position: relative;
+        display: inline-block;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+        img {
+          display: block;
+          max-width: 100%;
+          height: auto;
+          object-fit: cover;
+        }
+
+        .remove-image {
+          position: absolute;
+          top: 12px;
+          right: 12px;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: rgba(0, 0, 0, 0.7);
+          color: white;
+          border: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+          backdrop-filter: blur(4px);
+
+          &:hover {
+            background: rgba(255, 77, 79, 0.9);
+            transform: scale(1.1) rotate(90deg);
+          }
+
+          &:active {
+            transform: scale(0.95) rotate(90deg);
+          }
+
+          i {
+            font-size: 16px;
+          }
+        }
+      }
+
+      .error-message {
+        color: #ff4d4f;
+        font-size: 13px;
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-weight: 500;
+
+        i {
+          font-size: 14px;
+        }
+      }
+    }
+
+    .NgxEditor__Wrapper {
+      border: 1px solid #e6e6e6;
+      border-radius: 8px;
+      overflow: hidden;
+
+      &:focus-within {
+        border-color: var(--primary-main);
+        box-shadow: 0 0 0 3px rgba(144, 102, 204, 0.15);
+      }
+
+      &.is-invalid {
+        border-color: #ff4d4f;
+      }
+
+      .NgxEditor {
+        min-height: 280px;
+        max-height: 500px;
+        padding: 16px;
+        font-size: 15px;
+        line-height: 1.6;
+        letter-spacing: -0.3px;
+
+        @media (max-width: 768px) {
+          min-height: 240px;
+        }
+      }
+
+      .NgxEditor__MenuBar {
+        border-bottom: 1px solid #e6e6e6;
+        padding: 8px;
+        background: #fafafa;
+      }
+    }
+
+    .form-actions {
+      margin-top: 32px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      button {
+        min-width: 140px;
+        height: 44px;
+        padding: 0 24px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: none;
+        letter-spacing: -0.3px;
+
+        @media (max-width: 768px) {
+          width: 100%;
+          min-width: unset;
+        }
+
+        i {
+          font-size: 16px;
+        }
+
+        &.btn-cancel {
+          background: #f6f3ff;
+          color: var(--primary-main);
+          border: 1px solid var(--primary-main);
+
+          &:hover {
+            background: var(--primary-main);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(144, 102, 204, 0.2);
+          }
+
+          &:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(144, 102, 204, 0.2);
+          }
+        }
+
+        &.btn-submit {
+          background: linear-gradient(45deg, var(--primary-dark), var(--primary-main));
+          color: white;
+          box-shadow: 0 4px 16px rgba(144, 102, 204, 0.2);
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(144, 102, 204, 0.25);
+          }
+
+          &:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 12px rgba(144, 102, 204, 0.2);
+          }
+
+          &:disabled {
+            background: #f5f5f5;
+            border: 1px solid #e6e6e6;
+            color: #999;
+            cursor: not-allowed;
+            box-shadow: none;
+
+            &:hover {
+              background: #f5f5f5;
+              transform: none;
+            }
+          }
+
+          .loading-spinner {
+            margin-right: 8px;
+            animation: spin 1s linear infinite;
+          }
+        }
+
+        &:focus-visible {
+          outline: none;
+          box-shadow: 0 0 0 3px rgba(144, 102, 204, 0.2);
+        }
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

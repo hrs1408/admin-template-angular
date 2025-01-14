@@ -1,0 +1,92 @@
+<div class="blog-form">
+  <div class="header">
+    <h1>Thêm bài viết mới</h1>
+  </div>
+
+  <form [formGroup]="blogForm" (ngSubmit)="onSubmit()" class="form-container">
+    <div class="form-group">
+      <label for="title">Tiêu đề <span class="required">*</span></label>
+      <input
+        type="text"
+        id="title"
+        formControlName="title"
+        class="form-control"
+        [class.is-invalid]="blogForm.get('title')?.invalid && blogForm.get('title')?.touched"
+      />
+      <div class="error-message" *ngIf="blogForm.get('title')?.invalid && blogForm.get('title')?.touched">
+        {{ getErrorMessage('title') }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Ảnh bìa <span class="required">*</span></label>
+      <div class="image-upload">
+        <input
+          type="file"
+          accept="image/*"
+          (change)="onFileSelected($event)"
+          class="file-input"
+          #fileInput
+        />
+        <div class="image-preview" *ngIf="imagePreview">
+          <img [src]="imagePreview" alt="Preview" />
+        </div>
+        <button type="button" class="upload-btn" (click)="fileInput.click()" style="font-size: 16px; margin-top: 12px">
+          <i class="fas fa-upload"></i>
+          Chọn ảnh
+        </button>
+      </div>
+      <div class="error-message" *ngIf="blogForm.get('thumbnail')?.invalid && blogForm.get('thumbnail')?.touched">
+        {{ getErrorMessage('thumbnail') }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="summary">Tóm tắt <span class="required">*</span></label>
+      <textarea
+        id="summary"
+        formControlName="summary"
+        class="form-control"
+        rows="3"
+        [class.is-invalid]="blogForm.get('summary')?.invalid && blogForm.get('summary')?.touched"
+      ></textarea>
+      <div class="error-message" *ngIf="blogForm.get('summary')?.invalid && blogForm.get('summary')?.touched">
+        {{ getErrorMessage('summary') }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="content">Nội dung <span class="required">*</span></label>
+      <div class="NgxEditor__Wrapper">
+        <ngx-editor-menu *ngIf="editor" [editor]="editor"> </ngx-editor-menu>
+        <ngx-editor
+          *ngIf="editor"
+          [editor]="editor"
+          formControlName="content"
+          [placeholder]="'Nhập nội dung bài viết...'"
+          [class.is-invalid]="blogForm.get('content')?.invalid && blogForm.get('content')?.touched"
+        ></ngx-editor>
+        <textarea
+          *ngIf="!editor"
+          formControlName="content"
+          class="form-control"
+          rows="10"
+          placeholder="Nhập nội dung bài viết..."
+        ></textarea>
+      </div>
+      <div class="error-message" *ngIf="blogForm.get('content')?.invalid && blogForm.get('content')?.touched">
+        {{ getErrorMessage('content') }}
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="onCancel()">
+        Hủy
+      </button>
+      <button type="submit" class="btn-submit" [disabled]="isSubmitting">
+        <i class="fas fa-spinner fa-spin" *ngIf="isSubmitting"></i>
+        {{ isSubmitting ? 'Đang lưu...' : 'Lưu bài viết' }}
+      </button>
+    </div>
+  </form>
+</div>

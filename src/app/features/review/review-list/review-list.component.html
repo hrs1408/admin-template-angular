@@ -1,0 +1,12 @@
+<div class="review-management">
+  <div class="header">
+    <h1>Quản lý đánh giá</h1>
+  </div>
+
+  <app-data-table
+    [columns]="columns"
+    [data]="reviews"
+    [actions]="actions"
+    (actionClick)="onActionClick($event)">
+  </app-data-table>
+</div>

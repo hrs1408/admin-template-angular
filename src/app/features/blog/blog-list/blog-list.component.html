@@ -1,0 +1,16 @@
+<div class="blog-management">
+  <div class="header">
+    <h1>Quản lý bài viết</h1>
+    <button class="add-post-btn" (click)="onAddPost()">
+      <i class="fas fa-plus"></i>
+      Thêm bài viết mới
+    </button>
+  </div>
+
+  <app-data-table
+    [columns]="columns"
+    [data]="posts"
+    [actions]="actions"
+    (actionClick)="onActionClick($event)">
+  </app-data-table>
+</div>

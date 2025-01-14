@@ -1,0 +1,62 @@
+<div class="table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th *ngFor="let column of columns">{{ column.title }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of data">
+        <td *ngFor="let column of columns">
+          <ng-container [ngSwitch]="column.type">
+            <!-- Status -->
+            <span
+              *ngSwitchCase="'status'"
+              class="status-badge"
+              [class]="getStatusClass(item, column)"
+            >
+              {{ getValue(item, column) }}
+            </span>
+
+            <!-- Date -->
+            <span *ngSwitchCase="'date'">
+              {{ item[column.key] | date : column.dateFormat || "dd/MM/yyyy" }}
+            </span>
+
+            <!-- Image -->
+            <img
+              *ngSwitchCase="'image'"
+              [src]="item[column.key]"
+              [alt]="item.title || 'Image'"
+              width="200"
+              height="100"
+              [ngStyle]="getImageStyle(column)"
+              class="table-image"
+              (error)="onImageError($event)"
+            />
+
+            <!-- Actions -->
+            <div *ngSwitchCase="'actions'" class="actions">
+              <button
+                *ngFor="let action of actions"
+                class="action-btn"
+                [class]="action.type"
+                [title]="action.title"
+                (click)="onActionClick(action.type, item)"
+                [style.color]="action.color"
+                [style.display]="
+                  action.condition ? (action.condition(item) ? '' : 'none') : ''
+                "
+              >
+                <i class="fas {{ action.icon }}"></i>
+              </button>
+            </div>
+
+            <!-- Default Text -->
+            <span *ngSwitchDefault>{{ item[column.key] }}</span>
+          </ng-container>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

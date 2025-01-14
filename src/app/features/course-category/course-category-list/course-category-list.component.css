@@ -1,0 +1,39 @@
+.course-category-management {
+  padding: 24px;
+}
+
+.course-category-management .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.course-category-management .header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin: 0;
+}
+
+.course-category-management .header .add-category-btn {
+  background-color: var(--primary-main);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.course-category-management .header .add-category-btn:hover {
+  background-color: var(--primary-dark);
+}
+
+.course-category-management .header .add-category-btn i {
+  font-size: 14px;
+}

@@ -1,0 +1,12 @@
+<div class="user-management">
+  <div class="header">
+    <h1>Quản lý tài khoản</h1>
+  </div>
+
+  <app-data-table
+    [columns]="columns"
+    [data]="users"
+    [actions]="actions"
+    (actionClick)="onActionClick($event)">
+  </app-data-table>
+</div>

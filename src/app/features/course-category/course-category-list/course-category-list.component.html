@@ -1,0 +1,16 @@
+<div class="course-category-management">
+  <div class="header">
+    <h1>Quản lý danh mục khóa học</h1>
+    <button class="add-category-btn">
+      <i class="fas fa-plus"></i>
+      Thêm danh mục mới
+    </button>
+  </div>
+
+  <app-data-table
+    [columns]="columns"
+    [data]="categories"
+    [actions]="actions"
+    (actionClick)="onActionClick($event)">
+  </app-data-table>
+</div>

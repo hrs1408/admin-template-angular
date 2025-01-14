@@ -1,0 +1,17 @@
+.review-management {
+  padding: 24px;
+}
+
+.review-management .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.review-management .header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin: 0;
+}

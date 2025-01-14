@@ -1,0 +1,16 @@
+<div class="banner-management">
+  <div class="header">
+    <h1>Quản lý Banner</h1>
+    <button class="add-banner-btn">
+      <i class="fas fa-plus"></i>
+      Thêm banner mới
+    </button>
+  </div>
+
+  <app-data-table
+    [columns]="columns"
+    [data]="banners"
+    [actions]="actions"
+    (actionClick)="onActionClick($event)">
+  </app-data-table>
+</div>
