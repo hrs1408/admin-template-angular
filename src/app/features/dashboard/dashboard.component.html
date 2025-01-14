@@ -1,0 +1,121 @@
+<div class="dashboard">
+  <h1>Tổng quan</h1>
+
+  <!-- Thống kê -->
+  <div class="stat-cards">
+    <div class="stat-card" *ngFor="let card of statCards" [routerLink]="card.link" [style.color]="card.color">
+      <div class="stat-icon" [style.background-color]="card.color + '1A'">
+        <i class="fas" [class]="card.icon" [style.color]="card.color"></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ card.title }}</h3>
+        <p class="stat-value">{{ card.value }}</p>
+        <div class="stat-trend" *ngIf="card.trend" [class.down]="!card.trend.isUp">
+          <i class="fas" [class]="card.trend.isUp ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
+          {{ card.trend.value }}% so với tháng trước
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid">
+    <!-- Biểu đồ đăng ký -->
+    <div class="dashboard-card chart-card">
+      <h2>Thống kê đăng ký theo tháng</h2>
+      <apx-chart
+        #enrollmentChart
+        [series]="chartOptions.series!"
+        [chart]="chartOptions.chart!"
+        [xaxis]="chartOptions.xaxis!"
+        [stroke]="chartOptions.stroke!"
+        [dataLabels]="chartOptions.dataLabels!"
+        [markers]="chartOptions.markers!"
+        [grid]="chartOptions.grid!"
+        [colors]="chartOptions.colors!"
+        [yaxis]="chartOptions.yaxis!"
+        [legend]="chartOptions.legend!"
+      ></apx-chart>
+    </div>
+
+    <!-- Banner đang hoạt động -->
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>Banner đang hoạt động</h2>
+        <a [routerLink]="['/banners']" class="view-all">
+          <i class="fas fa-external-link-alt"></i>
+          Xem tất cả
+        </a>
+      </div>
+      <div class="banner-list">
+        <div class="banner-item" *ngFor="let banner of activeBanners">
+          <div class="banner-preview">
+            <img [src]="banner.imageUrl" [alt]="banner.title">
+            <span class="banner-order">#{{ banner.order }}</span>
+          </div>
+          <div class="banner-info">
+            <h3>{{ banner.title }}</h3>
+            <div class="banner-stats">
+              <div class="stat-item">
+                <i class="fas fa-eye"></i>
+                <span>{{ banner.impressions | number }} lượt xem</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-mouse-pointer"></i>
+                <span>{{ banner.clicks | number }} lượt click</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-chart-line"></i>
+                <span>{{ getClickRate(banner) }}% tỷ lệ click</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Khóa học phổ biến -->
+    <div class="dashboard-card">
+      <h2>Khóa học phổ biến</h2>
+      <div class="popular-courses">
+        <div class="course-item" *ngFor="let course of popularCourses">
+          <div class="course-info">
+            <h3>{{ course.name }}</h3>
+            <div class="course-stats">
+              <span class="students">
+                <i class="fas fa-user-graduate"></i>
+                {{ course.students }} học viên
+              </span>
+              <span class="rating">
+                <i class="fas fa-star"></i>
+                {{ course.rating }}
+              </span>
+            </div>
+          </div>
+          <div class="course-progress">
+            <div class="progress-bar" [style.width.%]="(course.students / 50) * 100"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Đánh giá gần đây -->
+    <div class="dashboard-card">
+      <h2>Đánh giá gần đây</h2>
+      <div class="recent-reviews">
+        <div class="review-item" *ngFor="let review of recentReviews">
+          <div class="review-header">
+            <div class="review-info">
+              <h3>{{ review.studentName }}</h3>
+              <p class="course-name">{{ review.courseName }}</p>
+            </div>
+            <div class="review-rating">
+              <i class="fas fa-star" *ngFor="let star of getStarArray(review.rating)"></i>
+            </div>
+          </div>
+          <p class="review-comment">{{ review.comment }}</p>
+          <p class="review-date">{{ review.date | date:'dd/MM/yyyy' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { BannerFormComponent } from '../banner-form/banner-form.component';
+import { ConfirmService } from '../../../core/services/confirm.service';
 import { Column, Action } from '../../../shared/components/data-table/data-table.component';
 
 interface Banner {
   id: number;
   title: string;
   imageUrl: string;
-  status: 'active' | 'inactive';
+  status: string;
   order: number;
   createdAt: Date;
 }
@@ -78,23 +81,70 @@ export class BannerListComponent implements OnInit {
     }
   ];
 
-  constructor() { }
+  constructor(
+    private modalService: NzModalService,
+    private confirmService: ConfirmService
+  ) { }
 
   ngOnInit(): void {
     // In real application, we would fetch banners from a service
   }
 
-  onActionClick(event: {type: string, item: Banner}): void {
+  showBannerModal(banner?: Banner): void {
+    const modal = this.modalService.create({
+      nzTitle: banner ? 'Chỉnh sửa banner' : 'Thêm banner mới',
+      nzContent: BannerFormComponent,
+      nzWidth: 800,
+      nzData: banner || null,
+      nzFooter: null
+    });
+
+    modal.afterClose.subscribe(result => {
+      if (result) {
+        if (banner) {
+          // Update existing banner
+          this.banners = this.banners.map(item =>
+            item.id === banner.id ? { ...item, ...result } : item
+          );
+        } else {
+          // Add new banner
+          const newBanner = {
+            id: Math.max(...this.banners.map(b => b.id)) + 1,
+            ...result,
+            createdAt: new Date()
+          };
+          this.banners = [...this.banners, newBanner];
+        }
+      }
+    });
+  }
+
+  async onActionClick(event: {type: string, item: Banner}): Promise<void> {
     switch(event.type) {
       case 'edit':
-        // Handle edit
-        console.log('Edit banner:', event.item);
+        this.showBannerModal(event.item);
         break;
       case 'toggle':
         this.toggleBannerStatus(event.item);
         break;
       case 'delete':
-        this.deleteBanner(event.item.id);
+        const confirmed = await this.confirmService.confirm({
+          title: 'Xóa banner',
+          text: 'Bạn có chắc chắn muốn xóa banner này không?'
+        });
+
+        if (confirmed) {
+          try {
+            this.deleteBanner(event.item.id);
+            await this.confirmService.success({
+              text: 'Xóa banner thành công!'
+            });
+          } catch (error) {
+            await this.confirmService.error({
+              text: 'Có lỗi xảy ra khi xóa banner!'
+            });
+          }
+        }
         break;
     }
   }

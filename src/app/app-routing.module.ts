@@ -12,12 +12,20 @@ const routes: Routes = [
     component: AdminLayoutComponent,
     children: [
       {
+        path: '',
+        loadChildren: () => import('./features/dashboard/dashboard.module').then(m => m.DashboardModule)
+      },
+      {
+        path: 'settings',
+        loadChildren: () => import('./features/settings/settings.module').then(m => m.SettingsModule)
+      },
+      {
         path: 'users',
         loadChildren: () => import('./features/user/user.module').then(m => m.UserModule)
       },
       {
-        path: 'banners',
-        loadChildren: () => import('./features/banner/banner.module').then(m => m.BannerModule)
+        path: 'teachers',
+        loadChildren: () => import('./features/teacher/teacher.module').then(m => m.TeacherModule)
       },
       {
         path: 'courses',
@@ -28,16 +36,16 @@ const routes: Routes = [
         loadChildren: () => import('./features/course-category/course-category.module').then(m => m.CourseCategoryModule)
       },
       {
+        path: 'banners',
+        loadChildren: () => import('./features/banner/banner.module').then(m => m.BannerModule)
+      },
+      {
+        path: 'blogs',
+        loadChildren: () => import('./features/blog/blog.module').then(m => m.BlogModule)
+      },
+      {
         path: 'reviews',
         loadChildren: () => import('./features/review/review.module').then(m => m.ReviewModule)
-      },
-      {
-        path: 'teachers',
-        loadChildren: () => import('./features/teacher/teacher.module').then(m => m.TeacherModule)
-      },
-      {
-        path: 'blog',
-        loadChildren: () => import('./features/blog/blog.module').then(m => m.BlogModule)
       }
     ]
   }

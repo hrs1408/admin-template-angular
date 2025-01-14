@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Column, Action } from '../../../shared/components/data-table/data-table.component';
+import { ConfirmService } from '../../../core/services/confirm.service';
 
 interface User {
   id: number;
@@ -65,13 +66,13 @@ export class UserListComponent implements OnInit {
     }
   ];
 
-  constructor() { }
+  constructor(private confirmService: ConfirmService) { }
 
   ngOnInit(): void {
     // In real application, we would fetch users from a service
   }
 
-  onActionClick(event: {type: string, item: User}): void {
+  async onActionClick(event: {type: string, item: User}): Promise<void> {
     switch(event.type) {
       case 'edit':
         console.log('Edit user:', event.item);
@@ -80,7 +81,23 @@ export class UserListComponent implements OnInit {
         this.toggleUserStatus(event.item);
         break;
       case 'delete':
-        this.deleteUser(event.item.id);
+        const confirmed = await this.confirmService.confirm({
+          title: 'Xóa người dùng',
+          text: 'Bạn có chắc chắn muốn xóa người dùng này không?'
+        });
+
+        if (confirmed) {
+          try {
+            this.deleteUser(event.item.id);
+            await this.confirmService.success({
+              text: 'Xóa người dùng thành công!'
+            });
+          } catch (error) {
+            await this.confirmService.error({
+              text: 'Có lỗi xảy ra khi xóa người dùng!'
+            });
+          }
+        }
         break;
     }
   }

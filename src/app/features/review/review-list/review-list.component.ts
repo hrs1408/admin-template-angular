@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Column, Action } from '../../../shared/components/data-table/data-table.component';
+import { ConfirmService } from '../../../core/services/confirm.service';
 
 interface CustomAction extends Action {
   customType?: string;
@@ -79,13 +80,13 @@ export class ReviewListComponent implements OnInit {
     }
   ];
 
-  constructor() { }
+  constructor(private confirmService: ConfirmService) { }
 
   ngOnInit(): void {
     // In real application, we would fetch reviews from a service
   }
 
-  onActionClick(event: {type: string, customType?: string, item: Review}): void {
+  async onActionClick(event: {type: string, customType?: string, item: Review}): Promise<void> {
     if (event.type === 'custom') {
       switch(event.customType) {
         case 'approve':
@@ -96,7 +97,23 @@ export class ReviewListComponent implements OnInit {
           break;
       }
     } else if (event.type === 'delete') {
-      this.deleteReview(event.item.id);
+      const confirmed = await this.confirmService.confirm({
+        title: 'Xóa đánh giá',
+        text: 'Bạn có chắc chắn muốn xóa đánh giá này không?'
+      });
+
+      if (confirmed) {
+        try {
+          this.deleteReview(event.item.id);
+          await this.confirmService.success({
+            text: 'Xóa đánh giá thành công!'
+          });
+        } catch (error) {
+          await this.confirmService.error({
+            text: 'Có lỗi xảy ra khi xóa đánh giá!'
+          });
+        }
+      }
     }
   }
 

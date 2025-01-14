@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Column, Action } from '../../../shared/components/data-table/data-table.component';
+import { ConfirmService } from '../../../core/services/confirm.service';
 
 interface CourseCategory {
   id: number;
@@ -47,20 +48,36 @@ export class CourseCategoryListComponent implements OnInit {
     }
   ];
 
-  constructor() { }
+  constructor(private confirmService: ConfirmService) { }
 
   ngOnInit(): void {
     // In real application, we would fetch categories from a service
   }
 
-  onActionClick(event: {type: string, item: CourseCategory}): void {
+  async onActionClick(event: {type: string, item: CourseCategory}): Promise<void> {
     switch(event.type) {
       case 'edit':
         // Handle edit
         console.log('Edit category:', event.item);
         break;
       case 'delete':
-        this.deleteCategory(event.item.id);
+        const confirmed = await this.confirmService.confirm({
+          title: 'Xóa danh mục',
+          text: 'Bạn có chắc chắn muốn xóa danh mục này không?'
+        });
+
+        if (confirmed) {
+          try {
+            this.deleteCategory(event.item.id);
+            await this.confirmService.success({
+              text: 'Xóa danh mục thành công!'
+            });
+          } catch (error) {
+            await this.confirmService.error({
+              text: 'Có lỗi xảy ra khi xóa danh mục!'
+            });
+          }
+        }
         break;
     }
   }

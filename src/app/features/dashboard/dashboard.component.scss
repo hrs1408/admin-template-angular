@@ -1,0 +1,348 @@
+.dashboard {
+  padding: 24px;
+  background: #f5f5f5;
+  min-height: calc(100vh - 64px);
+
+  h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .stat-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 32px;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 576px) {
+      grid-template-columns: 1fr;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: currentColor;
+        opacity: 0.1;
+      }
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+        .stat-icon {
+          transform: scale(1.1);
+        }
+      }
+
+      .stat-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+
+        i {
+          font-size: 28px;
+        }
+      }
+
+      .stat-info {
+        flex: 1;
+
+        h3 {
+          font-size: 15px;
+          font-weight: 500;
+          color: var(--text-secondary);
+          margin-bottom: 8px;
+          white-space: nowrap;
+        }
+
+        .stat-value {
+          font-size: 32px;
+          font-weight: 700;
+          color: var(--text-primary);
+          line-height: 1;
+          margin-bottom: 8px;
+        }
+
+        .stat-trend {
+          font-size: 13px;
+          color: #4CAF50;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+
+          i {
+            font-size: 12px;
+          }
+
+          &.down {
+            color: #f44336;
+          }
+        }
+      }
+    }
+  }
+
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 24px;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+
+    .dashboard-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #eee;
+
+        h2 {
+          margin: 0;
+          padding: 0;
+          border: none;
+        }
+
+        .view-all {
+          color: var(--primary-main);
+          text-decoration: none;
+          font-size: 14px;
+          font-weight: 500;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          transition: all 0.3s ease;
+
+          &:hover {
+            color: var(--primary-dark);
+          }
+
+          i {
+            font-size: 12px;
+          }
+        }
+      }
+
+      .banner-list {
+        .banner-item {
+          display: flex;
+          gap: 16px;
+          padding: 16px;
+          background: #f8f9fa;
+          border-radius: 8px;
+          margin-bottom: 16px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          .banner-preview {
+            position: relative;
+            width: 120px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+
+            .banner-order {
+              position: absolute;
+              top: 8px;
+              left: 8px;
+              background: rgba(0, 0, 0, 0.6);
+              color: white;
+              padding: 2px 8px;
+              border-radius: 4px;
+              font-size: 12px;
+              font-weight: 500;
+            }
+          }
+
+          .banner-info {
+            flex: 1;
+
+            h3 {
+              font-size: 16px;
+              font-weight: 500;
+              color: var(--text-primary);
+              margin-bottom: 12px;
+            }
+
+            .banner-stats {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 16px;
+
+              .stat-item {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                color: var(--text-secondary);
+                font-size: 14px;
+
+                i {
+                  font-size: 14px;
+                  color: var(--primary-main);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      &.chart-card {
+        grid-column: 1 / -1;
+      }
+    }
+
+    .popular-courses {
+      .course-item {
+        padding: 16px;
+        border-radius: 8px;
+        background: #f8f9fa;
+        margin-bottom: 16px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .course-info {
+          margin-bottom: 12px;
+
+          h3 {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+          }
+
+          .course-stats {
+            display: flex;
+            gap: 16px;
+            color: var(--text-secondary);
+            font-size: 14px;
+
+            i {
+              margin-right: 4px;
+            }
+
+            .rating {
+              i {
+                color: #FFC107;
+              }
+            }
+          }
+        }
+
+        .course-progress {
+          height: 6px;
+          background: #e9ecef;
+          border-radius: 3px;
+          overflow: hidden;
+
+          .progress-bar {
+            height: 100%;
+            background: var(--primary-main);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+          }
+        }
+      }
+    }
+
+    .recent-reviews {
+      .review-item {
+        padding: 16px;
+        border-radius: 8px;
+        background: #f8f9fa;
+        margin-bottom: 16px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .review-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 12px;
+
+          .review-info {
+            h3 {
+              font-size: 16px;
+              font-weight: 500;
+              color: var(--text-primary);
+              margin-bottom: 4px;
+            }
+
+            .course-name {
+              font-size: 14px;
+              color: var(--text-secondary);
+            }
+          }
+
+          .review-rating {
+            i {
+              color: #FFC107;
+              margin-left: 2px;
+            }
+          }
+        }
+
+        .review-comment {
+          font-size: 14px;
+          color: var(--text-primary);
+          margin-bottom: 8px;
+          line-height: 1.5;
+        }
+
+        .review-date {
+          font-size: 12px;
+          color: var(--text-secondary);
+        }
+      }
+    }
+  }
+}

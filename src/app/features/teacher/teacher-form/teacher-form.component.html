@@ -1,0 +1,96 @@
+<form nz-form [formGroup]="teacherForm" (ngSubmit)="submitForm()">
+  <div nz-row [nzGutter]="24">
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzRequired>Họ và tên</nz-form-label>
+        <nz-form-control [nzSpan]="18" nzErrorTip="Vui lòng nhập họ và tên!">
+          <input nz-input formControlName="fullName" placeholder="Nhập họ và tên" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzRequired>Email</nz-form-label>
+        <nz-form-control [nzSpan]="18" [nzErrorTip]="emailErrorTpl">
+          <input nz-input formControlName="email" placeholder="Nhập email" />
+          <ng-template #emailErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              Vui lòng nhập email!
+            </ng-container>
+            <ng-container *ngIf="control.hasError('email')">
+              Email không hợp lệ!
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzRequired>Số điện thoại</nz-form-label>
+        <nz-form-control [nzSpan]="18" [nzErrorTip]="phoneErrorTpl">
+          <input nz-input formControlName="phone" placeholder="Nhập số điện thoại" />
+          <ng-template #phoneErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              Vui lòng nhập số điện thoại!
+            </ng-container>
+            <ng-container *ngIf="control.hasError('pattern')">
+              Số điện thoại không hợp lệ!
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">Ảnh đại diện</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+          <nz-upload
+            class="avatar-uploader"
+            [nzAction]="'https://www.mocky.io/v2/5cc8019d300000980a055e76'"
+            [nzShowUploadList]="false"
+            [nzBeforeUpload]="beforeUpload"
+            (nzChange)="handleAvatarChange($event)"
+          >
+            <ng-container *ngIf="!avatarUrl">
+              <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
+              <div class="ant-upload-text">Tải ảnh lên</div>
+            </ng-container>
+            <img *ngIf="avatarUrl" [src]="avatarUrl" class="avatar" />
+          </nz-upload>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzRequired>Giới thiệu</nz-form-label>
+        <nz-form-control [nzSpan]="18" nzErrorTip="Vui lòng nhập giới thiệu!">
+          <textarea nz-input formControlName="bio" [nzAutosize]="{ minRows: 4, maxRows: 6 }" placeholder="Nhập giới thiệu"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">Trạng thái</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+          <nz-radio-group formControlName="status">
+            <label nz-radio-button nzValue="active">Hoạt động</label>
+            <label nz-radio-button nzValue="inactive">Không hoạt động</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button nz-button nzType="default" (click)="cancel()">Hủy</button>
+    <button nz-button nzType="primary" [disabled]="!teacherForm.valid" type="submit">
+      <i nz-icon nzType="save" nzTheme="outline"></i>
+      Lưu
+    </button>
+  </div>
+</form>

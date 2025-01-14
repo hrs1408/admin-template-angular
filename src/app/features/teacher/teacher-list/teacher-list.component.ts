@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { TeacherFormComponent } from '../teacher-form/teacher-form.component';
+import { ConfirmService } from '../../../core/services/confirm.service';
 import { Column, Action } from '../../../shared/components/data-table/data-table.component';
 
 interface Teacher {
   id: number;
-  name: string;
-  avatar: string;
-  description: string;
-  experience: string;
-  status: 'active' | 'inactive';
-  created_at: string;
-  updated_at: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  avatarUrl: string;
+  bio: string;
+  status: string;
+  createdAt: Date;
 }
 
 @Component({
@@ -21,31 +24,36 @@ export class TeacherListComponent implements OnInit {
   teachers: Teacher[] = [
     {
       id: 1,
-      name: 'Nguyễn Văn A',
-      avatar: 'https://i.ibb.co/mJXv1dK/2.png',
-      description: 'Giáo viên có nhiều năm kinh nghiệm giảng dạy tiếng Trung',
-      experience: '5 năm kinh nghiệm',
+      fullName: 'Nguyễn Văn A',
+      email: 'nguyenvana@example.com',
+      phone: '0123456789',
+      avatarUrl: 'https://example.com/avatar1.jpg',
+      bio: 'Giáo viên tiếng Trung với 5 năm kinh nghiệm',
       status: 'active',
-      created_at: '2024-12-15 07:25:57.690405',
-      updated_at: '2024-12-15 07:25:57.690405'
+      createdAt: new Date()
+    },
+    {
+      id: 2,
+      fullName: 'Trần Thị B',
+      email: 'tranthib@example.com',
+      phone: '0987654321',
+      avatarUrl: 'https://example.com/avatar2.jpg',
+      bio: 'Giáo viên tiếng Trung với 3 năm kinh nghiệm',
+      status: 'active',
+      createdAt: new Date()
     }
   ];
 
   columns: Column[] = [
     { key: 'id', title: 'ID' },
+    { key: 'fullName', title: 'Họ và tên' },
+    { key: 'email', title: 'Email' },
+    { key: 'phone', title: 'Số điện thoại' },
     {
-      key: 'avatar',
+      key: 'avatarUrl',
       title: 'Ảnh đại diện',
-      type: 'image',
-      imageConfig: {
-        width: '60px',
-        height: '60px',
-        borderRadius: '50%'
-      }
+      type: 'image'
     },
-    { key: 'name', title: 'Tên giáo viên' },
-    { key: 'description', title: 'Giới thiệu' },
-    { key: 'experience', title: 'Kinh nghiệm' },
     {
       key: 'status',
       title: 'Trạng thái',
@@ -57,8 +65,7 @@ export class TeacherListComponent implements OnInit {
         falseLabel: 'Không hoạt động'
       }
     },
-    { key: 'created_at', title: 'Ngày tạo', type: 'date' },
-    { key: 'updated_at', title: 'Ngày cập nhật', type: 'date' },
+    { key: 'createdAt', title: 'Ngày tạo', type: 'date' },
     { key: 'actions', title: 'Thao tác', type: 'actions' }
   ];
 
@@ -81,30 +88,76 @@ export class TeacherListComponent implements OnInit {
     }
   ];
 
-  constructor() { }
+  constructor(
+    private modalService: NzModalService,
+    private confirmService: ConfirmService
+  ) { }
 
   ngOnInit(): void {
     // In real application, we would fetch teachers from a service
   }
 
-  onActionClick(event: {type: string, item: Teacher}): void {
+  showTeacherModal(teacher?: Teacher): void {
+    const modal = this.modalService.create({
+      nzTitle: teacher ? 'Chỉnh sửa giáo viên' : 'Thêm giáo viên mới',
+      nzContent: TeacherFormComponent,
+      nzWidth: 800,
+      nzData: teacher || null,
+      nzFooter: null
+    });
+
+    modal.afterClose.subscribe(result => {
+      if (result) {
+        if (teacher) {
+          // Update existing teacher
+          this.teachers = this.teachers.map(item =>
+            item.id === teacher.id ? { ...item, ...result } : item
+          );
+        } else {
+          // Add new teacher
+          const newTeacher = {
+            id: Math.max(...this.teachers.map(t => t.id)) + 1,
+            ...result,
+            createdAt: new Date()
+          };
+          this.teachers = [...this.teachers, newTeacher];
+        }
+      }
+    });
+  }
+
+  async onActionClick(event: {type: string, item: Teacher}): Promise<void> {
     switch(event.type) {
       case 'edit':
-        // Handle edit
-        console.log('Edit teacher:', event.item);
+        this.showTeacherModal(event.item);
         break;
       case 'toggle':
         this.toggleTeacherStatus(event.item);
         break;
       case 'delete':
-        this.deleteTeacher(event.item.id);
+        const confirmed = await this.confirmService.confirm({
+          title: 'Xóa giáo viên',
+          text: 'Bạn có chắc chắn muốn xóa giáo viên này không?'
+        });
+
+        if (confirmed) {
+          try {
+            this.deleteTeacher(event.item.id);
+            await this.confirmService.success({
+              text: 'Xóa giáo viên thành công!'
+            });
+          } catch (error) {
+            await this.confirmService.error({
+              text: 'Có lỗi xảy ra khi xóa giáo viên!'
+            });
+          }
+        }
         break;
     }
   }
 
   private toggleTeacherStatus(teacher: Teacher): void {
     teacher.status = teacher.status === 'active' ? 'inactive' : 'active';
-    teacher.updated_at = new Date().toISOString();
   }
 
   private deleteTeacher(id: number): void {

@@ -87,7 +87,7 @@ export class BlogListComponent implements OnInit {
   ngOnInit(): void {}
 
   onAddPost(): void {
-    this.router.navigate(['/blog/create']);
+    this.router.navigate(['/blogs/create']);
   }
 
   async onActionClick(event: { type: string; item: any }) {
