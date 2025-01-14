@@ -1,14 +1,32 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { CommonModule } from '@angular/common';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
 
 @Component({
   selector: 'app-teacher-form',
   templateUrl: './teacher-form.component.html',
   styleUrls: ['./teacher-form.component.scss'],
-  standalone: false
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    NzFormModule,
+    NzInputModule,
+    NzButtonModule,
+    NzUploadModule,
+    NzIconModule,
+    NzGridModule,
+    NzRadioModule
+  ]
 })
 export class TeacherFormComponent implements OnInit {
   @Input() data: any;
@@ -52,7 +70,7 @@ export class TeacherFormComponent implements OnInit {
     }
   }
 
-  beforeUpload = (file: NzUploadFile): boolean => {
+  beforeUpload = (file: NzUploadFile, _fileList: NzUploadFile[]): boolean => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
       this.message.error('Bạn chỉ có thể tải lên file JPG/PNG!');

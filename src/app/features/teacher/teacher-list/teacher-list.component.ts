@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { TeacherFormComponent } from '../teacher-form/teacher-form.component';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { Column, Action } from '../../../shared/components/data-table/data-table.component';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { DataTableComponent } from '../../../shared/components/data-table/data-table.component';
 
 interface Teacher {
   id: number;
@@ -18,7 +22,14 @@ interface Teacher {
 @Component({
   selector: 'app-teacher-list',
   templateUrl: './teacher-list.component.html',
-  styleUrls: ['./teacher-list.component.scss']
+  styleUrls: ['./teacher-list.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    NzButtonModule,
+    NzIconModule,
+    DataTableComponent
+  ]
 })
 export class TeacherListComponent implements OnInit {
   teachers: Teacher[] = [

@@ -1,28 +1,28 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 
 export interface Column {
   key: string;
   title: string;
-  type?: 'text' | 'date' | 'status' | 'actions' | 'image';
-  dateFormat?: string;
+  type?: 'text' | 'date' | 'status' | 'image' | 'actions';
   statusConfig?: {
-    trueValue: string;
-    falseValue: string;
+    trueValue: string | boolean;
+    falseValue: string | boolean;
     trueLabel: string;
     falseLabel: string;
-  };
-  imageConfig?: {
-    width?: string;
-    height?: string;
-    borderRadius?: string;
   };
 }
 
 export interface Action {
   icon: string;
   title: string;
-  type: 'edit' | 'delete' | 'toggle' | 'custom';
-  color?: string;
+  type: string;
+  customType?: string;
   condition?: (item: any) => boolean;
 }
 
@@ -30,58 +30,38 @@ export interface Action {
   selector: 'app-data-table',
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss'],
+  imports: [
+    CommonModule,
+    NzTableModule,
+    NzButtonModule,
+    NzIconModule,
+    NzDropDownModule,
+    NzTagModule
+  ]
 })
 export class DataTableComponent {
   @Input() columns: Column[] = [];
   @Input() data: any[] = [];
   @Input() actions: Action[] = [];
+  @Output() actionClick = new EventEmitter<{type: string, customType?: string, item: any}>();
 
-  @Output() actionClick = new EventEmitter<{ type: string; item: any }>();
-
-  onActionClick(type: string, item: any): void {
-    this.actionClick.emit({ type, item });
+  onActionClick(type: string, customType: string | undefined, item: any): void {
+    this.actionClick.emit({ type, customType, item });
   }
 
-  getValue(item: any, column: Column): any {
-    const value = item[column.key];
+  getStatusLabel(column: Column, value: any): string {
+    if (!column.statusConfig) return value;
 
-    if (column.type === 'status') {
-      const config = column.statusConfig;
-      if (config) {
-        return value === config.trueValue
-          ? config.trueLabel
-          : config.falseLabel;
-      }
-    }
-
-    return value;
+    return value === column.statusConfig.trueValue
+      ? column.statusConfig.trueLabel
+      : column.statusConfig.falseLabel;
   }
 
-  getStatusClass(item: any, column: Column): string {
-    if (column.type === 'status' && column.statusConfig) {
-      return item[column.key] === column.statusConfig.trueValue
-        ? 'active'
-        : 'inactive';
-    }
-    return '';
+  isStatusTrue(column: Column, value: any): boolean {
+    return column.statusConfig ? value === column.statusConfig.trueValue : value;
   }
 
-  getImageStyle(column: Column): any {
-    if (column.type === 'image' && column.imageConfig) {
-      return {
-        width: column.imageConfig.width || '50px',
-        height: column.imageConfig.height || '50px',
-        borderRadius: column.imageConfig.borderRadius || '4px',
-        objectFit: 'cover',
-      };
-    }
-    return {};
-  }
-
-  onImageError(event: Event): void {
-    const img = event.target as HTMLImageElement;
-    if (img) {
-      img.src = 'https://i.ibb.co/mJXv1dK/2.png';
-    }
+  shouldShowAction(action: Action, item: any): boolean {
+    return action.condition ? action.condition(item) : true;
   }
 }

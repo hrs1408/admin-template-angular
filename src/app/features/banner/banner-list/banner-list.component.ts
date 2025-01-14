@@ -3,6 +3,10 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { BannerFormComponent } from '../banner-form/banner-form.component';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { Column, Action } from '../../../shared/components/data-table/data-table.component';
+import { CommonModule } from '@angular/common';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { DataTableComponent } from '../../../shared/components/data-table/data-table.component';
 
 interface Banner {
   id: number;
@@ -16,7 +20,14 @@ interface Banner {
 @Component({
   selector: 'app-banner-list',
   templateUrl: './banner-list.component.html',
-  styleUrls: ['./banner-list.component.scss']
+  styleUrls: ['./banner-list.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    NzButtonModule,
+    NzIconModule,
+    DataTableComponent
+  ]
 })
 export class BannerListComponent implements OnInit {
   banners: Banner[] = [
